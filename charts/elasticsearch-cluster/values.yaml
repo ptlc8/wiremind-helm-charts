@@ -38,6 +38,9 @@ es-defaults: &defaults
   extraVolumeMounts: |
     - mountPath: /usr/share/elasticsearch/plugins/
       name: plugindir
+  extraEnvs:
+    - name: xpack.security.authc.anonymous.roles
+      value: "superuser"
 
 ## The data nodes
 es-data-hot:
@@ -61,6 +64,7 @@ es-data-hot:
   roles:
     - ingest
     - data_hot
+    - data_content
   replicas: 1
   # esJavaOpts: "-Xmx1g  -Xms1g"
   # resources:
@@ -87,7 +91,7 @@ es-data-hot:
   extraVolumes: |
     - name: elasticsearch-certs
       secret:
-        secretName: my2-elasticsearch-cluster-master-certs
+        secretName: my-elasticsearch-cluster-master-certs
     - name: plugindir
       emptyDir: {}
   extraEnvs:
@@ -111,6 +115,8 @@ es-data-hot:
       value: "/usr/share/elasticsearch/config/certs/tls.crt"
     - name: xpack.security.http.ssl.certificate_authorities
       value: "/usr/share/elasticsearch/config/certs/ca.crt"
+    - name: xpack.security.authc.anonymous.roles
+      value: "superuser"
   extraVolumeMounts:
     - name: elasticsearch-certs
       mountPath: /usr/share/elasticsearch/config/certs
@@ -301,9 +307,11 @@ backup:
   # priorityClassName:
 
 kibana:
-  enabled: false
+  enabled: true
   ## Change me
-  elasticsearchHosts: https://my-elasticsearch-cluster-data-hot:9200
+  elasticsearchHosts: https://my-elasticsearch-cluster-master:9200
+  elasticsearchCertificateSecret: my-elasticsearch-cluster-master-certs
+  elasticsearchCredentialSecret: my-elasticsearch-cluster-master-credentials
   resources:
     limits:
       cpu: 2
@@ -333,7 +341,7 @@ prometheus-elasticsearch-exporter:
   enabled: true
   es:
     ## Change me
-    uri: http://my-elasticsearch-master-url:9200
+    uri: https://my-elasticsearch-master-url:9200
   resources:
     requests:
       cpu: 10m
