@@ -67,15 +67,6 @@ es-data-hot:
   #     node:
   #       attr:
   #         data: hot
-  #     xpack:
-  #       security:
-  #         enabled: false
-  #         transport:
-  #           ssl:
-  #             enabled: false
-  #         http:
-  #           ssl:
-  #             enabled: false
   roles:
     - ingest
     - data_hot
@@ -112,15 +103,6 @@ es-data-warm:
   #     node:
   #       attr:
   #         data: warm
-  #     xpack:
-  #       security:
-  #         enabled: false
-  #         transport:
-  #           ssl:
-  #             enabled: false
-  #         http:
-  #           ssl:
-  #             enabled: false
   roles:
     - data_warm
   replicas: 1
@@ -146,15 +128,6 @@ es-data-cold:
   #     node:
   #       attr:
   #         data: cold
-  #     xpack:
-  #       security:
-  #         enabled: false
-  #         transport:
-  #           ssl:
-  #             enabled: false
-  #         http:
-  #           ssl:
-  #             enabled: false
   roles:
     - data_cold
   replicas: 1
@@ -197,17 +170,6 @@ es-master:
   <<: *defaults
   nodeGroup: "master"
   enabled: true
-  # esConfig:
-  #   elasticsearch.yml: |
-  #     xpack:
-  #       security:
-  #         enabled: false
-  #         transport:
-  #           ssl:
-  #             enabled: false
-  #         http:
-  #           ssl:
-  #             enabled: false
   roles:
     - master
   # esJavaOpts: "-Xms128m -Xmx128m"
@@ -311,6 +273,8 @@ kibana:
           credentials:
             username: "kibana_user"
             password: "kibana_user"
+        basic.basic1:
+          order: 1
   ingress:
     enabled: false
     # hosts:
